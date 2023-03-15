@@ -1,14 +1,82 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 //Program to show best deals in hotel reservation.
 public class HotelReservationSystem {
     public ArrayList<Hotels> hotelList = new ArrayList<>();
+    public static HotelReservationSystem reservationSystem = new HotelReservationSystem();
+    public void findCheapestHotel(){
+        int n;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("For how many days you want to book room");
+        n = scanner.nextInt();
+        String[] dateRange  = new String[n];
+        System.out.println("Enter dates (eg. 12jan2022)");
+        for (int i = 0; i < n; i++) {
+            dateRange[i] = scanner.next();
+        }
+        int[] totalWeekAndWeekends = new int[n];
+        totalWeekAndWeekends =  checkDay(dateRange);
+        int[] totalRate = new int[]{0,0,0};
+        for (int j = 0; j < totalRate.length; j++) {
+
+            for (int i = 0; i < totalWeekAndWeekends.length; i++) {
+
+                if (totalWeekAndWeekends[i] == 1) {
+                        totalRate[j] += hotelList.get(j).getRegularWeekdayRates();
+                    }
+                else {
+                    totalRate[j] += hotelList.get(j).getRegularWeekendRates();
+                }
+            }
+        }
+        String display = reservationSystem.compareAndGetCheapPrice(totalRate,reservationSystem.hotelList);
+        System.out.println("Hotel Name\n"+display);
+    }
+
+    public int[] checkDay(String[] dates){
+
+        int[] totalweeksAndweekends = new int[dates.length];
+        int monthindex=0;
+        int flag = 0;
+        String[] month = {"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
+        String[] weekdays = {"MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY"};
+        //storing weekday and weekend in array totalweekday and weekend
+        for (int k = 0; k < dates.length; k++) {
+            String q = dates[k].substring(2, 5);
+            String dayOfMonth = dates[k].substring(0, 2);
+            String year = dates[k].substring(5, dates[k].length());
+            for (int i = 0; i < month.length; i++) {
+                if (month[i].equals(q))
+                    monthindex = i + 1;
+            }
+            //calculating which day from given date
+            LocalDate localDate = LocalDate.of(Integer.parseInt(year), monthindex, Integer.parseInt(dayOfMonth));
+            java.time.DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+            //checking and tracking weekday or weekend
+            for (int i = 0; i < weekdays.length; i++) {
+                if (dayOfWeek.toString().equals(weekdays[i]))
+                { totalweeksAndweekends[flag] = 1;
+                flag++;}
+            }
+        }
+
+        return totalweeksAndweekends;
+    }
+    //comparing total prices
+    public String  compareAndGetCheapPrice(int[] rate, ArrayList<Hotels> hotelList){
+        if(rate[0]<rate[1] && rate[0]<rate[2])
+            return reservationSystem.hotelList.get(0).getName()+", Rates:"+rate[0];
+        else if(rate[1]<rate[2] && rate[1]<rate[0])
+            return reservationSystem.hotelList.get(1).getName()+", Rates:"+rate[1];
+        else
+            return reservationSystem.hotelList.get(2).getName()+", Rates:"+rate[2];
+    }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int flag = -1;
         System.out.println("Welcome to hotel reservation system");
-        HotelReservationSystem reservationSystem = new HotelReservationSystem();
         reservationSystem.hotelList.add(
                 new Hotels("Lakewood","3",90,110,80,80));
         reservationSystem.hotelList.add(
@@ -16,10 +84,8 @@ public class HotelReservationSystem {
         reservationSystem.hotelList.add(
                 new Hotels("Ridgewood","5",150,220,40,100));
         reservationSystem.hotelList.forEach(System.out::println);
-        while (flag!=0){
-            int rewardType;
-            System.out.println("Enter details\nIf reward customer press 1 or else press 0 if regular");
-            rewardType = scanner.nextInt();
-        }
+
+        reservationSystem.findCheapestHotel();
+
     }
 }
