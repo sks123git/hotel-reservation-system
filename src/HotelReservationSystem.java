@@ -73,6 +73,22 @@ public class HotelReservationSystem {
         else
             return reservationSystem.hotelList.get(2).getName()+", Rates:"+rate[2];
     }
+
+    public void updateRates(){
+        System.out.println("Which hotel rate you want to update enter 0, 1 or 2");
+        reservationSystem.hotelList.forEach(System.out::println);
+        Scanner scanner =new Scanner(System.in);
+        int choice = scanner.nextInt();
+        System.out.println("Enter regular weekdays rate");
+        reservationSystem.hotelList.get(choice).setRegularWeekdayRates(scanner.nextInt());
+        System.out.println("Enter regular weekend rates");
+        reservationSystem.hotelList.get(choice).setRegularWeekendRates(scanner.nextInt());
+        System.out.println("Enter reward weekdays rates");
+        reservationSystem.hotelList.get(choice).setRewardWeekdayRates(scanner.nextInt());
+        System.out.println("Enter reward weekend rates");
+        reservationSystem.hotelList.get(choice).setRewardWeekendRates(scanner.nextInt());
+
+    }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int flag = -1;
@@ -85,7 +101,17 @@ public class HotelReservationSystem {
                 new Hotels("Ridgewood","5",150,220,40,100));
         reservationSystem.hotelList.forEach(System.out::println);
 
-        reservationSystem.findCheapestHotel();
+        while (flag!=0){
+            System.out.println("Enter choices \n1. Find budget hotel\n2. Update rates\n0. Exit  ");
+            int choice = scanner.nextInt();
+            switch (choice){
+                case 1:reservationSystem.findCheapestHotel();
+                break;
+                case 2:reservationSystem.updateRates();
+                break;
+                case 0:flag=0;
+            }
+        }
 
     }
 }
