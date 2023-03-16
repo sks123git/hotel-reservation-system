@@ -1,6 +1,5 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 //Program to show best deals in hotel reservation.
 public class HotelReservationSystem {
@@ -73,6 +72,20 @@ public class HotelReservationSystem {
         else
             return reservationSystem.hotelList.get(2).getName()+", Rates:"+rate[2];
     }
+    public void findBestRatedHotel(){
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < hotelList.size(); i++) {
+            list.add(hotelList.get(i).getRating());
+        }
+        Collections.sort(list);
+        Iterator<Hotels> iterator = hotelList.iterator();
+        while (iterator.hasNext()){
+            Hotels h1 = iterator.next();
+            if(h1.getRating() == list.get(list.size()-1)){
+                System.out.println(h1);
+            }
+        }
+    }
 //Updating the rates of each hotel
     public void updateRates(){
         System.out.println("Which hotel rate you want to update enter 0, 1 or 2");
@@ -115,7 +128,8 @@ public class HotelReservationSystem {
         reservationSystem.displayHotelList();
 
         while (flag!=0){
-            System.out.println("Enter choices \n1. Find budget hotel\n2. Update rates\n3. Give Rating\n4. Display list of hotels\n0. Exit  ");
+            System.out.println("Enter choices \n1. Find budget hotel\n2. Update rates\n3. Give Rating\n4. Display list of hotels\n" +
+                    "5. Find best rated hotel\n0. Exit  ");
             int choice = scanner.nextInt();
             switch (choice){
                 case 1:reservationSystem.findCheapestHotel();
@@ -125,6 +139,8 @@ public class HotelReservationSystem {
                 case 3:reservationSystem.rateHotels();
                 break;
                 case 4:reservationSystem.displayHotelList();
+                break;
+                case 5:reservationSystem.findBestRatedHotel();
                 break;
                 case 0:flag=0;
             }
