@@ -73,7 +73,7 @@ public class HotelReservationSystem {
         else
             return reservationSystem.hotelList.get(2).getName()+", Rates:"+rate[2];
     }
-
+//Updating the rates of each hotel
     public void updateRates(){
         System.out.println("Which hotel rate you want to update enter 0, 1 or 2");
         reservationSystem.hotelList.forEach(System.out::println);
@@ -87,7 +87,20 @@ public class HotelReservationSystem {
         reservationSystem.hotelList.get(choice).setRewardWeekdayRates(scanner.nextInt());
         System.out.println("Enter reward weekend rates");
         reservationSystem.hotelList.get(choice).setRewardWeekendRates(scanner.nextInt());
-
+    }
+    //feature to give rating to hotels
+    public void rateHotels(){
+        System.out.println("Which hotel do you want to rate enter 0, 1 or 2");
+        reservationSystem.hotelList.forEach(System.out::println);
+        Scanner scanner =new Scanner(System.in);
+        int choice = scanner.nextInt();
+        System.out.println("Enter regular weekdays rate");
+        reservationSystem.hotelList.get(choice).setRating(scanner.next());
+    }
+    public void displayHotelList(){
+        System.out.println("-----------Hotels List-----------");
+        reservationSystem.hotelList.forEach(System.out::println);
+        System.out.println("---------------------------------");
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -99,15 +112,19 @@ public class HotelReservationSystem {
                 new Hotels("Bridgewood","4",60,160,50,110));
         reservationSystem.hotelList.add(
                 new Hotels("Ridgewood","5",150,220,40,100));
-        reservationSystem.hotelList.forEach(System.out::println);
+        reservationSystem.displayHotelList();
 
         while (flag!=0){
-            System.out.println("Enter choices \n1. Find budget hotel\n2. Update rates\n0. Exit  ");
+            System.out.println("Enter choices \n1. Find budget hotel\n2. Update rates\n3. Give Rating\n4. Display list of hotels\n0. Exit  ");
             int choice = scanner.nextInt();
             switch (choice){
                 case 1:reservationSystem.findCheapestHotel();
                 break;
                 case 2:reservationSystem.updateRates();
+                break;
+                case 3:reservationSystem.rateHotels();
+                break;
+                case 4:reservationSystem.displayHotelList();
                 break;
                 case 0:flag=0;
             }
