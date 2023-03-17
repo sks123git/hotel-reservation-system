@@ -19,9 +19,7 @@ public class HotelReservationSystem {
         totalWeekAndWeekends =  checkDay(dateRange);
         int[] totalRate = new int[]{0,0,0};
         for (int j = 0; j < totalRate.length; j++) {
-
             for (int i = 0; i < totalWeekAndWeekends.length; i++) {
-
                 if (totalWeekAndWeekends[i] == 1) {
                         totalRate[j] += hotelList.get(j).getRegularWeekdayRates();
                     }
@@ -31,11 +29,39 @@ public class HotelReservationSystem {
             }
         }
         String display = reservationSystem.compareAndGetCheapPrice(totalRate,reservationSystem.hotelList);
+        System.out.println("-----------Hotels List-----------");
         System.out.println("Hotel Name\n"+display);
+        System.out.println("-----------Hotels List-----------");
     }
-
+    public void findCheapestHotelForRewardCustomer(){
+        int n;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("For how many days you want to book room");
+        n = scanner.nextInt();
+        String[] dateRange  = new String[n];
+        System.out.println("Enter dates (eg. 12jan2022)");
+        for (int i = 0; i < n; i++) {
+            dateRange[i] = scanner.next();
+        }
+        int[] totalWeekAndWeekends2 = new int[n];
+        totalWeekAndWeekends2 =  checkDay(dateRange);
+        int[] totalRate = new int[]{0,0,0};
+        for (int j = 0; j < totalRate.length; j++) {
+            for (int i = 0; i < totalWeekAndWeekends2.length; i++) {
+                if (totalWeekAndWeekends2[i] == 1) {
+                    totalRate[j] += hotelList.get(j).getRewardWeekdayRates();
+                }
+                else {
+                    totalRate[j] += hotelList.get(j).getRewardWeekendRates();
+                }
+            }
+        }
+        String display = reservationSystem.compareAndGetCheapPrice(totalRate,reservationSystem.hotelList);
+        System.out.println("-----------Hotels List-----------");
+        System.out.println("Hotel Name\n"+display);
+        System.out.println("-----------Hotels List-----------");
+    }
     public int[] checkDay(String[] dates){
-
         int[] totalweeksAndweekends = new int[dates.length];
         int monthindex=0;
         int flag = 0;
@@ -129,7 +155,7 @@ public class HotelReservationSystem {
 
         while (flag!=0){
             System.out.println("Enter choices \n1. Find budget hotel\n2. Update rates\n3. Give Rating\n4. Display list of hotels\n" +
-                    "5. Find best rated hotel\n0. Exit  ");
+                    "5. Find best rated hotel\n6. Find budget hotel for reward customers\n0. Exit  ");
             int choice = scanner.nextInt();
             switch (choice){
                 case 1:reservationSystem.findCheapestHotel();
@@ -141,6 +167,8 @@ public class HotelReservationSystem {
                 case 4:reservationSystem.displayHotelList();
                 break;
                 case 5:reservationSystem.findBestRatedHotel();
+                break;
+                case 6:reservationSystem.findCheapestHotelForRewardCustomer();
                 break;
                 case 0:flag=0;
             }
